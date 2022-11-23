@@ -1,0 +1,33 @@
+<!doctype html>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock%}
+
+{% block style_block %}
+<style>
+    .log_in{
+        width:300px;
+        
+        border:1px solid #ccc;
+        padding:20px;
+   
+    }
+</style>
+{% endblock%}
+
+{% block body_block %}
+<center style='padding-top:15%'>
+<div class="log_in">
+    <form method="POST" >
+        {{form|crispy}}
+        {% csrf_token %}
+        <br>
+        <button type="submit" class="btn btn-primary btn-sm" style="width:190px" >Submit</button>
+        </form>
+
+        <p style='padding-top:10%'><b>Create new <a href="{% url 'accountapp:change_passs' %}">Change password</a> here</b></p>
+        
+</div>
+</center>
+
+{% endblock %}

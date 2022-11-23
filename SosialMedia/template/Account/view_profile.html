@@ -1,0 +1,78 @@
+<!doctype html>
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock %}
+
+{% block style_block %}
+  <style>
+    
+  </style>
+{% endblock %}
+
+{% block body_block %}
+
+<div class="row">
+    <div class="col-sm-4">
+        {% if result_user.users.P_P %}
+              <a class="nav-link" href="{% url 'accountapp:profile' %}"><img src="/media/{{result_user.users.P_P}}" width="200px" height="200px" class="rounded-circle"> </a>
+
+          {% else %}
+          
+            <a  href="{% url 'accountapp:profile' %}"><img src="/media/userImg/avater.png" width="200px" height="200px" class="rounded-circle"></a>
+        
+          {% endif %}
+
+    </div>
+    <div class="col-sm-8" style="padding-top:10px">
+         
+        <h3>@{{result_user.username}} &nbsp
+          {% if not alrady_follow %}
+          <a href="{% url 'accountapp:follow' username=result_user.username %}" class="btn btn-secondary">Floow</a>
+          {% else %}
+          <a href="{% url 'accountapp:unfollow' username=result_user.username %}" class="btn btn-secondary">Unfloow</a>
+          {% endif %}
+        </h3>
+        <h4>{{result_user.post.count}} Posts &nbsp &nbsp {{result_user.followers.count}} Following &nbsp &nbsp {{result_user.following.count}} Followers</h4>
+        <br>
+        <h4><b>{{result_user.first_name}} {{result_user.last_name}}</b></h4>
+        <h6>{{result_user.users.bio|linebreaks}}
+
+    </div>
+   
+</div>
+<hr>
+
+
+
+
+<div style='padding:10px' >
+    {% for post in result_user.post.all %}
+    <div class="col">
+        <div class="row-sm-2">
+          {% if result_user.users.P_P %}
+              <a class="nav-link" href="{% url 'accountapp:profile' %}"><img src="/media/{{result_user.users.P_P}}" width="50px" height="100px" class="rounded-circle"> </a>
+
+          {% else %}
+          
+            <a  href="{% url 'accountapp:profile' %}"><img src="/media/userImg/avater.png" width="50px" height="50px" class="rounded-circle"></a>
+        
+          {% endif %}
+          <p >{{post.author}}</p>
+          <p >{{post.post_date}}</p>
+          <p >{{post.update}}</p>
+        </div>
+        <div class="row-sm-6">
+          <p>{{post.caption}}</p>
+        </div>
+        <div class="row-sm-4">
+          <img src="/media/{{post.img}}" width="200px" height="200px"  >
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+ 
+
+
+{% endblock %}
+

@@ -1,0 +1,78 @@
+<!doctype html>
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock%}
+
+{% block style_block %}
+
+{% endblock%}
+
+{% block body_block %}
+{% if Search %}
+
+{% for result in results %}
+<div class="row" style="padding-top:10px">
+    <div class="col-md-2 ">
+        {% if result.users.P_P %}
+          <a class="nav-link" href="{% url 'accountapp:view_profile' username=result.username %}"><img src="/media/{{result.users.P_P}}" width="60px" height="60px" class="rounded-circle"> </a>
+      {% else %}
+        <a  href="{% url 'accountapp:view_profile' username=result.username %}"><img src="/media/userImg/avater.png" width="60px" height="60px" class="rounded-circle"></a>
+      {% endif %}
+    </div>
+    <div class="col-md-10" >
+        <a href="{% url 'accountapp:view_profile' username=result.username %}"><h4>@{{result.username}}</h4></a>
+        {{result.first_name}} {{result.last_name}}
+        <h6>{{result.post.count}} Posts &nbsp &nbsp {{result.followers.count}} Following &nbsp &nbsp {{result.following.count}} Followers</h6>
+    </div>
+</div>
+{% endfor %}
+
+
+{% else %}
+<div >
+  {% for post in posts %}
+  <div class="col" style='padding:15px'>
+      <div class="row-sm-2">
+        {% if post.author.users.P_P %}
+            <a class="nav-link" href="{% url 'accountapp:profile' %}"><img src="/media/{{post.author.users.P_P}}" width="50px" height="50px" class="rounded-circle"> </a>
+
+        {% else %}
+        
+          <a  href="{% url 'accountapp:profile' %}"><img src="/media/userImg/avater.png" width="50px" height="50px" class="rounded-circle"></a>
+      
+        {% endif %}
+        &nbsp
+        <b>@{{post.author}}</b>
+        <p>Creat post: {{post.post_date}} <br> Update post: {{post.update}}</p>
+        
+      </div>
+      <div class="row-sm-6">
+        <p>{{post.caption}}</p>
+      </div>
+      <div class="row-sm-4">
+        <img src="/media/{{post.img}}" width="200px" height="200px"  >
+      </div>
+  </div>
+  <div>
+    <b>&nbsp {{post.post_like.count}}</b> &nbsp
+    {% if post.pk in post_like_list %}
+    <a href="{% url 'postapp:user_unlike' pk=post.pk %}" class="btn btn-success btn-sm" >Unlike</a>
+    {% else %}
+    <a href="{% url 'postapp:user_like' pk=post.pk %}" class="btn btn-success btn-sm" >Like</a>
+    {% endif %}
+  </div>
+
+  {% endfor %}
+</div>
+
+
+{% endif %}
+
+
+
+{% endblock %}
+
+
+
+
+      

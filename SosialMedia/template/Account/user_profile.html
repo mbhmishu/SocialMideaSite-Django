@@ -1,0 +1,126 @@
+<!doctype html>
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock %}
+
+{% block style_block %}
+  <style>
+    .list_div{
+        width:70%;
+        border:1px solid #ccc;
+        padding:20px;
+        
+
+    }
+    div.fixed {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+      border: 3px solid #73AD21;
+    }
+  </style>
+{% endblock %}
+
+{% block body_block %}
+
+<div class="row">
+    <div class="col-sm-4">
+        {% if user.users.P_P %}
+              <a class="nav-link" href="{% url 'accountapp:profile' %}"><img src="/media/{{user.users.P_P}}" width="200px" height="200px" class="rounded-circle"> </a>
+
+          {% else %}
+          
+            <a  href="{% url 'accountapp:profile' %}"><img src="/media/userImg/avater.png" width="200px" height="200px" class="rounded-circle"></a>
+        
+          {% endif %}
+
+    </div>
+    <div class="col-sm-8" style="padding-top:30px">
+        <h3>@{{user.username}} &nbsp &nbsp<a  href="{% url 'accountapp:edit_prfile' %}" class="btn btn-light">Edit profile</a>
+        </h3>
+        <h4>{{user.post.count}} Posts &nbsp &nbsp {{user.followers.count}} Following &nbsp &nbsp {{user.following.count}} Followers</h4>
+        <br>
+        <h4><b>{{user.first_name}} {{user.last_name}}</b></h4>
+        <h6>{{user.users.bio|linebreaks}}
+
+    </div>
+   
+</div>
+<hr>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+    Creat post
+  </button>
+  <!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Create your post</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form method="POST" enctype="multipart/form-data">
+            {{form.as_p}}
+            {% csrf_token %}
+            <br>
+            <button type="submit" class="btn btn-sm btn-primary">Post<button>
+                  
+          </form>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+
+
+  
+
+
+
+<div class="list_div " >
+    {% for post in user.post.all %}
+    <div class="col" style="padding:10px">
+        <div class="row-sm-2">
+          {% if user.users.P_P %}
+              <a class="nav-link" href="{% url 'accountapp:profile' %}"><img src="/media/{{user.users.P_P}}" width="50px" height="50px" class="rounded-circle"> </a>
+
+          {% else %}
+          
+            <a  href="{% url 'accountapp:profile' %}"><img src="/media/userImg/avater.png" width="50px" height="50px" class="rounded-circle"></a>
+        
+          {% endif %}
+          &nbsp
+          <p ><b>@{{post.author}}</b></p>
+          <p >{{post.post_date}} <br>{{post.update}}</p>
+          <p ></p>
+        </div>
+        <div class="row-sm-6">
+          <p>{{post.caption|linebreaks}}</p>
+        </div>
+        <div class="row-sm-4">
+          <img src="/media/{{post.img}}" width="200px" height="200px"  >
+          
+          &nbsp
+          <br>
+          <a href="{% url 'postapp:UdatePost' pk=post.pk %}" class="btn btn-primary btn-sm">Edit post</a>
+        </div>
+    </div>
+    
+    {% endfor %}
+</div>
+ 
+
+
+{% endblock %}
+
